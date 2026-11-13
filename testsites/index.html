@@ -32,6 +32,13 @@ h1 { margin: 0; color: var(--ink); font-size: clamp(34px, 5vw, 48px); font-weigh
 footer { margin-top: 40px; font-size: 13.5px; color: var(--muted); }
 footer a { color: var(--body); }
 @media (max-width: 600px) { .site { grid-template-columns: 1fr; } }
+.unlock { max-width: 420px; }
+.unlock label { display: block; font-size: 14px; margin-bottom: 8px; color: var(--ink); }
+.unlock-row { display: flex; gap: 10px; }
+.unlock input { flex: 1; min-width: 0; font: inherit; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.unlock input:focus { outline: 2px solid var(--sage); outline-offset: 1px; }
+.unlock button { font: 600 15px var(--font); color: var(--bg); background: var(--sage); border: 0; border-radius: 12px; padding: 0 22px; cursor: pointer; }
+.pw-msg { min-height: 1.6em; margin: 10px 0 0; font-size: 14px; color: #F2A7A7; }
 </style>
 </head>
 <body>
@@ -39,43 +46,36 @@ footer a { color: var(--body); }
   <h1>Test sites</h1>
   <p class="lede">Working copies of my sites, used to try changes before they go live. They're hidden from search engines and not linked from anywhere else.</p>
 
-  <div class="list">
-    <section class="site">
-      <h2>Technology Leaders Forum</h2><span class="repo">tlf-website-test</span>
-      <div class="links">
-        <a href="https://ukdavies.com/tlf-website-test/">ukdavies.com/tlf-website-test</a>
-        <a href="https://ukdavies.com/tlf-website-test/ryi/">Registration form</a>
-        <a class="live" href="https://www.technologyleadersforum.com/">Live: technologyleadersforum.com</a>
-      </div>
-    </section>
-    <section class="site">
-      <h2>Nuffield Consulting</h2><span class="repo">nuffield-consulting-test</span>
-      <div class="links">
-        <a href="https://ukdavies.com/nuffield-consulting-test/">ukdavies.com/nuffield-consulting-test</a>
-        <a class="live" href="https://nuffieldconsulting.com/">Live: nuffieldconsulting.com</a>
-      </div>
-    </section>
-    <section class="site">
-      <h2>The Daily Tech Wire</h2><span class="repo">tech-wire-test</span>
-      <div class="links">
-        <a href="https://ukdavies.com/tech-wire-test/">ukdavies.com/tech-wire-test</a>
-        <a class="live" href="https://news.nuffieldconsulting.com/">Live: news.nuffieldconsulting.com</a>
-      </div>
-    </section>
-    <section class="site">
-      <h2>ukdavies.com</h2><span class="repo">ukdavies-test</span>
-      <div class="links">
-        <a href="https://ukdavies.com/ukdavies-test/">ukdavies.com/ukdavies-test</a>
-        <a class="live" href="https://ukdavies.com/">Live: ukdavies.com</a>
-      </div>
-    </section>
-    <section class="site">
-      <h2>Nuffield Hill Jewellery</h2><span class="repo">nuffieldhill-test</span>
-      <div class="links">
-        <a href="https://ukdavies.com/nuffieldhill-test/">ukdavies.com/nuffieldhill-test</a>
-      </div>
-    </section>
-  </div>
+  <form id="unlock" class="unlock" autocomplete="off">
+    <label for="pw">Password</label>
+    <div class="unlock-row"><input id="pw" type="password" autocomplete="current-password" required autofocus><button type="submit">Open</button></div>
+    <p id="pw-msg" class="pw-msg" role="status" aria-live="polite"></p>
+  </form>
+  <div id="content" hidden></div>
+  <script>
+  (function () {
+    var D = { salt: "cOLLjxZ92DFK/HBscdhYMQ==", iv: "IRqgbyvssVoJGeQn", it: 250000, ct: "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" };
+    var u = function (x) { return Uint8Array.from(atob(x), function (c) { return c.charCodeAt(0); }); };
+    function open(pw) {
+      var enc = new TextEncoder();
+      return crypto.subtle.importKey('raw', enc.encode(pw), 'PBKDF2', false, ['deriveKey'])
+        .then(function (k) { return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: u(D.salt), iterations: D.it, hash: 'SHA-256' }, k, { name: 'AES-GCM', length: 256 }, false, ['decrypt']); })
+        .then(function (key) { return crypto.subtle.decrypt({ name: 'AES-GCM', iv: u(D.iv) }, key, u(D.ct)); })
+        .then(function (buf) {
+          var c = document.getElementById('content');
+          c.innerHTML = new TextDecoder().decode(buf); c.hidden = false;
+          document.getElementById('unlock').hidden = true;
+          try { sessionStorage.setItem('ts-pw', pw); } catch (e) {}
+        });
+    }
+    var f = document.getElementById('unlock'), msg = document.getElementById('pw-msg');
+    f.addEventListener('submit', function (e) {
+      e.preventDefault(); msg.textContent = '';
+      open(document.getElementById('pw').value).catch(function () { msg.textContent = 'That password is not right.'; document.getElementById('pw').select(); });
+    });
+    try { var saved = sessionStorage.getItem('ts-pw'); if (saved) open(saved).catch(function () {}); } catch (e) {}
+  })();
+  </script>
 
   <footer><a href="../">← ukdavies.com</a></footer>
 </main>
