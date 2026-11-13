@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test sites · Andy Davies</title>
+<link rel="icon" href="../mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0F1828; --card: rgba(255,255,255,0.035); --card-hover: rgba(255,255,255,0.07);
+  --line: rgba(255,255,255,0.09); --line-hover: rgba(159,203,184,0.45);
+  --ink: #F4F2EC; --body: #B7C0CD; --muted: #7D8899; --sage: #9FCBB8;
+  --font: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--body); font: 16px/1.6 var(--font); }
+.wrap { max-width: 980px; margin: 0 auto; padding: 64px 28px; }
+h1 { margin: 0; color: var(--ink); font-size: clamp(34px, 5vw, 48px); font-weight: 800; letter-spacing: -0.03em; }
+.lede { margin: 14px 0 40px; max-width: 640px; }
+.list { display: grid; gap: 14px; }
+.site { display: grid; grid-template-columns: 1fr auto; gap: 6px 24px; align-items: center;
+  padding: 22px 24px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); }
+.site h2 { margin: 0; color: var(--ink); font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+.site .links { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 14.5px; }
+.site a { color: var(--sage); text-underline-offset: 3px; overflow-wrap: anywhere; }
+.site a.live { color: var(--muted); }
+.site .repo { font-size: 13px; color: var(--muted); }
+footer { margin-top: 40px; font-size: 13.5px; color: var(--muted); }
+footer a { color: var(--body); }
+@media (max-width: 600px) { .site { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <h1>Test sites</h1>
+  <p class="lede">Working copies of my sites, used to try changes before they go live. They're hidden from search engines and not linked from anywhere else.</p>
+
+  <div class="list">
+    <section class="site">
+      <h2>Technology Leaders Forum</h2><span class="repo">tlf-website-test</span>
+      <div class="links">
+        <a href="https://ukdavies.com/tlf-website-test/">ukdavies.com/tlf-website-test</a>
+        <a href="https://ukdavies.com/tlf-website-test/ryi/">Registration form</a>
+        <a class="live" href="https://www.technologyleadersforum.com/">Live: technologyleadersforum.com</a>
+      </div>
+    </section>
+    <section class="site">
+      <h2>Nuffield Consulting</h2><span class="repo">nuffield-consulting-test</span>
+      <div class="links">
+        <a href="https://ukdavies.com/nuffield-consulting-test/">ukdavies.com/nuffield-consulting-test</a>
+        <a class="live" href="https://nuffieldconsulting.com/">Live: nuffieldconsulting.com</a>
+      </div>
+    </section>
+    <section class="site">
+      <h2>The Daily Tech Wire</h2><span class="repo">tech-wire-test</span>
+      <div class="links">
+        <a href="https://ukdavies.com/tech-wire-test/">ukdavies.com/tech-wire-test</a>
+        <a class="live" href="https://news.nuffieldconsulting.com/">Live: news.nuffieldconsulting.com</a>
+      </div>
+    </section>
+    <section class="site">
+      <h2>ukdavies.com</h2><span class="repo">ukdavies-test</span>
+      <div class="links">
+        <a href="https://ukdavies.com/ukdavies-test/">ukdavies.com/ukdavies-test</a>
+        <a class="live" href="https://ukdavies.com/">Live: ukdavies.com</a>
+      </div>
+    </section>
+    <section class="site">
+      <h2>Nuffield Hill Jewellery</h2><span class="repo">nuffieldhill-test</span>
+      <div class="links">
+        <a href="https://ukdavies.com/nuffieldhill-test/">ukdavies.com/nuffieldhill-test</a>
+      </div>
+    </section>
+  </div>
+
+  <footer><a href="../">← ukdavies.com</a></footer>
+</main>
+</body>
+</html>
