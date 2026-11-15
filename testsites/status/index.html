@@ -87,7 +87,7 @@ footer a { color: var(--body); }
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
 
   // The status data is encrypted to this page's key; the key itself is locked with the password.
-  var DATA_URL = 'https://news.nuffieldconsulting.com/ops/status.json';
+  var DATA_URL = 'https://techwire.nuffieldconsulting.com/ops/status.json';
   var LOCK = {"salt": "vd/5zr9wErm9IgDybNbgUg==", "iv": "/WVmE8OwNRGKjN0D", "it": 250000, "ct": "Y359tcTuXSM3DUyKcNTxqPSSxtflBD2KTFiq4gFZJiRcyjPPlGVKmxO8TgGi2D0MfWI/pcokLXRlzkm1nrsRKU9EIeLWlUhQRzbSFoa22K+k1UICpHCMmuv8+rQ+Go7+CrIEhViAybtGzWeSr3TdtCYbW8irYrI7Jl9aF9UHh9g6YmbHzt5nD6CiN3/szEHubTp2FwsLIid5eQ=="};
   var te = new TextEncoder();
   function unlockKey(pw) {
@@ -244,7 +244,7 @@ footer a { color: var(--body); }
       h.push('<div class="kv ' + c + '"><b><span class="dot"></span> ' + esc(n) + '</b>Last: ' + esc(w.conclusion) + ', ' + esc(when(w.createdAt)) + ' · <a href="' + esc(w.url) + '">view</a></div>');
     });
     if (data.workflows && data.workflows.error) h.push('<div class="kv"><b>GitHub workflows</b><span style="color:var(--warn)">' + esc(data.workflows.error) + '</span></div>');
-    h.push('</div><p class="muted" style="font-size:13.5px;margin-top:10px"><a href="https://news.nuffieldconsulting.com/">news.nuffieldconsulting.com</a> · <a href="https://github.com/ukdavies/tech-wire/tree/ops-log/runs">Raw log on GitHub</a></p>');
+    h.push('</div><p class="muted" style="font-size:13.5px;margin-top:10px"><a href="https://techwire.nuffieldconsulting.com/">techwire.nuffieldconsulting.com</a> · <a href="https://github.com/ukdavies/tech-wire/tree/ops-log/runs">Raw log on GitHub</a></p>');
 
     // recent runs
     h.push('<h2>Recent runs</h2>');
