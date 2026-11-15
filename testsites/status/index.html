@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tech Wire status · Andy Davies</title>
+<link rel="icon" href="../../mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0F1828; --card: rgba(255,255,255,0.035); --line: rgba(255,255,255,0.09);
+  --ink: #F4F2EC; --body: #B7C0CD; --muted: #7D8899; --sage: #9FCBB8;
+  --ok: #8FD4A8; --warn: #F2C879; --bad: #F2A7A7; --idle: #7D8899;
+  --font: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--body); font: 15.5px/1.55 var(--font); }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 48px 22px 64px; }
+h1 { margin: 0; color: var(--ink); font-size: clamp(30px, 5vw, 42px); font-weight: 800; letter-spacing: -0.03em; }
+h2 { margin: 40px 0 14px; color: var(--ink); font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
+.sub { margin: 6px 0 26px; color: var(--muted); font-size: 14px; }
+a { color: var(--sage); text-underline-offset: 3px; }
+.banner { display: flex; align-items: center; gap: 14px; padding: 18px 20px; border-radius: 16px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font-weight: 700; font-size: 17px; }
+.banner .dot { width: 14px; height: 14px; }
+.banner small { display: block; font-weight: 400; color: var(--body); font-size: 14px; }
+.dot { flex: none; display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--idle); }
+.s-ok .dot, .dot.s-ok { background: var(--ok); } .s-warn .dot, .dot.s-warn { background: var(--warn); }
+.s-bad .dot, .dot.s-bad { background: var(--bad); } .s-idle .dot, .dot.s-idle { background: var(--idle); }
+.tasks { display: grid; gap: 10px; }
+.task { padding: 16px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+.task .top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.task .name { color: var(--ink); font-weight: 700; }
+.pill { font-size: 12.5px; font-weight: 700; padding: 2px 10px; border-radius: 999px; background: rgba(255,255,255,0.06); }
+.s-ok .pill { color: var(--ok); } .s-warn .pill { color: var(--warn); } .s-bad .pill { color: var(--bad); } .s-idle .pill { color: var(--muted); }
+.task .meta { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+.task .sum { margin-top: 6px; font-size: 14.5px; }
+.issue { padding: 12px 16px; border-left: 3px solid var(--warn); background: var(--card); border-radius: 0 10px 10px 0; margin-bottom: 8px; font-size: 14.5px; overflow-wrap: anywhere; }
+.issue.bad { border-color: var(--bad); } .issue.ask { border-color: var(--sage); }
+.issue .when { display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 2px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.kv { padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); font-size: 14px; }
+.kv b { display: block; color: var(--ink); font-size: 14.5px; margin-bottom: 2px; }
+details.run { border-bottom: 1px solid var(--line); padding: 10px 2px; font-size: 14px; }
+details.run summary { cursor: pointer; display: flex; gap: 10px; align-items: baseline; list-style: none; }
+details.run summary::-webkit-details-marker { display: none; }
+details.run .t { color: var(--muted); min-width: 92px; font-variant-numeric: tabular-nums; }
+details.run .n { color: var(--ink); }
+details.run .o { margin-left: auto; font-size: 12.5px; font-weight: 700; }
+details.run .body { margin: 8px 0 4px 102px; }
+details.run pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12.5px; background: rgba(0,0,0,0.25); padding: 10px; border-radius: 8px; color: var(--body); }
+.o-ok, .o-no_change { color: var(--ok); } .o-partial { color: var(--warn); } .o-failed { color: var(--bad); }
+.muted { color: var(--muted); }
+footer { margin-top: 40px; font-size: 13.5px; color: var(--muted); }
+footer a { color: var(--body); }
+.unlock { max-width: 420px; }
+.unlock label { display: block; font-size: 14px; margin-bottom: 8px; color: var(--ink); }
+.unlock-row { display: flex; gap: 10px; }
+.unlock input { flex: 1; min-width: 0; font: inherit; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.unlock input:focus { outline: 2px solid var(--sage); outline-offset: 1px; }
+.unlock button { font: 600 15px var(--font); color: var(--bg); background: var(--sage); border: 0; border-radius: 12px; padding: 0 22px; cursor: pointer; }
+.pw-msg { min-height: 1.6em; margin: 10px 0 0; font-size: 14px; color: var(--bad); }
+@media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } details.run .body { margin-left: 0; } details.run .t { min-width: 78px; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <h1>Tech Wire status</h1>
+  <p class="sub" id="sub">Scheduled tasks behind The Daily Tech Wire, read from the run log.</p>
+
+  <form id="unlock" class="unlock" autocomplete="off">
+    <label for="pw">Password</label>
+    <div class="unlock-row"><input id="pw" type="password" autocomplete="current-password" required autofocus><button type="submit">Open</button></div>
+    <p id="pw-msg" class="pw-msg" role="status" aria-live="polite"></p>
+  </form>
+  <div id="app" hidden></div>
+
+  <footer><a href="../">← Test sites</a></footer>
+</main>
+<script>
+(function () {
+  var GRACE_MIN = 60;           // a scheduled run counts as missed this long after it was due
+  var app = document.getElementById('app');
+  var u = function (x) { return Uint8Array.from(atob(x), function (c) { return c.charCodeAt(0); }); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+
+  function decrypt(D, pw) {
+    return crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey'])
+      .then(function (k) { return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: u(D.salt), iterations: D.it, hash: 'SHA-256' }, k, { name: 'AES-GCM', length: 256 }, false, ['decrypt']); })
+      .then(function (key) { return crypto.subtle.decrypt({ name: 'AES-GCM', iv: u(D.iv) }, key, u(D.ct)); })
+      .then(function (buf) { return JSON.parse(new TextDecoder().decode(buf)); });
+  }
+  function load(pw) {
+    return fetch('data.json?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('nodata'); return r.json(); })
+      .then(function (D) { return decrypt(D, pw); })
+      .then(function (data) {
+        try { sessionStorage.setItem('ts-pw', pw); } catch (e) {}
+        document.getElementById('unlock').hidden = true;
+        app.hidden = false; render(data);
+      });
+  }
+
+  // ---------- time helpers (UK display, schedule maths in the task's own zone) ----------
+  var fmtUK = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  var fmtTime = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit' });
+  var fmtDay = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', weekday: 'short', day: 'numeric', month: 'short' });
+  function ukDayKey(d) { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London' }).format(d); }
+  function when(iso) {
+    if (!iso) return '–';
+    var d = new Date(iso), now = new Date();
+    if (ukDayKey(d) === ukDayKey(now)) return 'Today ' + fmtTime.format(d);
+    if (ukDayKey(d) === ukDayKey(new Date(now - 864e5))) return 'Yesterday ' + fmtTime.format(d);
+    return fmtUK.format(d);
+  }
+  function ago(iso) {
+    var m = Math.round((Date.now() - new Date(iso)) / 60000);
+    if (m < 1) return 'just now'; if (m < 60) return m + ' min ago';
+    var h = Math.round(m / 60); if (h < 48) return h + (h === 1 ? ' hour ago' : ' hours ago');
+    return Math.round(h / 24) + ' days ago';
+  }
+  function offsetMin(tz, date) {   // minutes the zone is ahead of UTC at that instant
+    var p = {}; new Intl.DateTimeFormat('en-US', { timeZone: tz, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
+      .formatToParts(date).forEach(function (x) { p[x.type] = x.value; });
+    return (Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute) - Math.floor(date / 60000) * 60000) / 60000;
+  }
+  function zoned(tz, y, mo, d, h, mi) {   // wall-clock time in tz -> Date
+    var guess = Date.UTC(y, mo, d, h, mi);
+    var t = guess - offsetMin(tz, new Date(guess)) * 60000;
+    return new Date(guess - offsetMin(tz, new Date(t)) * 60000);
+  }
+  function occurrences(spec, from, to) {   // scheduled instants between two Dates
+    var tz = spec.tz || 'Europe/London', out = [];
+    var start = new Date(from - 864e5);
+    for (var day = Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate()); day <= +to + 864e5; day += 864e5) {
+      var dt = new Date(day), y = dt.getUTCFullYear(), mo = dt.getUTCMonth(), d = dt.getUTCDate(), dow = dt.getUTCDay();
+      if (spec.dow && spec.dow.indexOf(dow) < 0) continue;
+      if (spec.dom && spec.dom.indexOf(d) < 0) continue;
+      var slots = [];
+      if (spec.times) spec.times.forEach(function (t) { var a = t.split(':'); slots.push([+a[0], +a[1]]); });
+      else for (var h = 0; h < 24; h++) {
+        if (spec.hours && spec.hours.indexOf(h) < 0) continue;
+        if (spec.hours_except && spec.hours_except.indexOf(h) >= 0) continue;
+        slots.push([h, spec.minute || 0]);
+      }
+      slots.forEach(function (s) { var x = zoned(tz, y, mo, d, s[0], s[1]); if (x >= from && x <= to) out.push(x); });
+    }
+    return out.sort(function (a, b) { return a - b; });
+  }
+
+  // ---------- status per task ----------
+  function taskStatus(t, runs, logStart) {
+    var now = new Date(), mine = runs.filter(function (r) { return r.slug === t.slug; });
+    var last = mine[0], spec = t.spec;
+    var done = spec.until_done && last && last.counts && last.counts[spec.until_done] === 0;
+    var next = done ? null : occurrences(spec, now, new Date(+now + 40 * 864e5))[0];
+    var due = occurrences(spec, new Date(+now - 40 * 864e5), new Date(+now - GRACE_MIN * 60000));
+    var lastDue = due[due.length - 1];
+    var st = { last: last, next: next, cls: 's-ok', label: 'OK', note: '' };
+    if (done) { st.cls = 's-idle'; st.label = 'Finished'; st.note = 'Backfill complete; no more runs expected.'; return st; }
+    var missed = lastDue && lastDue >= logStart && !mine.some(function (r) { return new Date(r.started || r.finished) >= new Date(+lastDue - 10 * 60000); });
+    if (missed) { st.cls = 's-bad'; st.label = 'Missed'; st.note = 'Was due ' + when(lastDue.toISOString()) + ' and has not logged a run.'; }
+    else if (!last) { st.cls = 's-idle'; st.label = 'No runs yet'; st.note = 'Nothing logged since the log started.'; }
+    else if (last.outcome === 'failed') { st.cls = 's-bad'; st.label = 'Failed'; }
+    else if (last.outcome === 'partial') { st.cls = 's-warn'; st.label = 'Partial'; }
+    else if (last.needs_andy) { st.cls = 's-warn'; st.label = 'Needs you'; }
+    else if (last.errors && last.errors.length) { st.cls = 's-warn'; st.label = 'OK, with errors'; }
+    else st.label = last.outcome === 'no_change' ? 'OK – no change' : 'OK';
+    return st;
+  }
+
+  function render(data) {
+    var runs = data.runs || [], logStart = new Date(data.log_start), h = [];
+    document.getElementById('sub').innerHTML = 'Refreshed from the run log ' + esc(ago(data.generated)) + ' (' + esc(when(data.generated)) + '). Updates hourly.';
+    var stale = (Date.now() - new Date(data.generated)) > 3 * 3600e3;
+
+    var statuses = data.schedule.map(function (t) { return { t: t, s: taskStatus(t, runs, logStart) }; });
+    var bad = statuses.filter(function (x) { return x.s.cls === 's-bad'; }).length;
+    var warn = statuses.filter(function (x) { return x.s.cls === 's-warn'; }).length;
+    var bcls = stale || bad ? 's-bad' : warn ? 's-warn' : 's-ok';
+    var btxt = stale ? 'This page has stopped updating' : bad ? bad + (bad === 1 ? ' task needs attention' : ' tasks need attention') : warn ? warn + (warn === 1 ? ' task to look at' : ' tasks to look at') : 'Everything is running normally';
+    var since = runs.filter(function (r) { return Date.now() - new Date(r.finished) < 864e5; });
+    var pub = since.filter(function (r) { return r.published && r.published.length; }).length;
+    h.push('<div class="banner ' + bcls + '"><span class="dot"></span><div>' + esc(btxt) +
+      '<small>' + (stale ? 'Last refreshed ' + esc(ago(data.generated)) + '. The hourly GitHub job may be failing. ' : '') +
+      since.length + ' runs in the past 24 hours, ' + pub + ' published an update.</small></div></div>');
+
+    h.push('<h2>Tasks</h2><div class="tasks">');
+    statuses.forEach(function (x) {
+      var t = x.t, s = x.s, l = s.last;
+      h.push('<div class="task ' + s.cls + '"><div class="top"><span class="dot"></span><span class="name">' + esc(t.task) + '</span><span class="pill">' + esc(s.label) + '</span></div>' +
+        '<div class="meta">' + esc(t.when) + ' · Last run: ' + (l ? esc(when(l.finished || l.started)) : 'none logged') + (s.next ? ' · Next: ' + esc(when(s.next.toISOString())) : '') + '</div>' +
+        (s.note ? '<div class="sum">' + esc(s.note) + '</div>' : '') +
+        (l && l.summary ? '<div class="sum">' + esc(l.summary) + '</div>' : '') +
+        (l && l.needs_andy ? '<div class="issue ask"><span class="when">Needs you</span>' + esc(l.needs_andy) + '</div>' : '') + '</div>');
+    });
+    var known = data.schedule.map(function (t) { return t.slug; });
+    var other = runs.filter(function (r) { return known.indexOf(r.slug) < 0; });
+    if (other.length) h.push('<div class="task s-idle"><div class="top"><span class="dot"></span><span class="name">Other entries</span></div><div class="meta">' + other.length + ' run(s) from tasks not on the expected schedule: ' + esc(Array.from(new Set(other.map(function (r) { return r.task || r.slug; }))).join(', ')) + '</div></div>');
+    h.push('</div>');
+
+    // problems in the past 7 days
+    var issues = [];
+    runs.forEach(function (r) {
+      if (Date.now() - new Date(r.finished) > 7 * 864e5) return;
+      (r.errors || []).forEach(function (e) { issues.push({ c: 'bad', r: r, k: 'Error', m: e }); });
+      if (r.outcome === 'failed' && !(r.errors || []).length) issues.push({ c: 'bad', r: r, k: 'Failed', m: r.summary });
+    });
+    (data.unreadable || []).forEach(function (b) { issues.push({ c: 'bad', r: { task: b.file }, k: 'Unreadable log entry', m: b.error }); });
+    var wf = (data.workflows && data.workflows.runs) || [];
+    wf.forEach(function (w) {
+      if (w.conclusion === 'failure' && Date.now() - new Date(w.createdAt) < 7 * 864e5)
+        issues.push({ c: 'bad', r: { task: 'GitHub: ' + w.workflowName, finished: w.createdAt }, k: 'Workflow failed', m: '<a href="' + esc(w.url) + '">Open the run on GitHub</a>', html: true });
+    });
+    h.push('<h2>Errors in the past 7 days</h2>');
+    if (!issues.length) h.push('<p class="muted">None.</p>');
+    issues.forEach(function (i) { h.push('<div class="issue ' + i.c + '"><span class="when">' + esc(i.k) + ' · ' + esc(i.r.task) + (i.r.finished ? ' · ' + esc(when(i.r.finished)) : '') + '</span>' + (i.html ? i.m : esc(i.m)) + '</div>'); });
+
+    // site and GitHub
+    var s = data.site || {};
+    h.push('<h2>Live site</h2><div class="grid2">');
+    h.push('<div class="kv"><b>Headlines</b>' + (s.headlines_error ? '<span style="color:var(--bad)">Could not read: ' + esc(s.headlines_error) + '</span>' :
+      'Edition ' + esc(s.edition) + ', updated ' + esc(s.updated ? when(s.updated) + ' (' + ago(s.updated) + ')' : '–') + '<br>' + esc(s.headlines) + ' headlines · ' + esc(s.outages) + ' outages · ' + esc(s.breaches) + ' breaches') + '</div>');
+    h.push('<div class="kv"><b>Funding</b>' + (s.funding_error ? '<span style="color:var(--bad)">Could not read: ' + esc(s.funding_error) + '</span>' : 'Week ending ' + esc(s.funding_week_end)) + '</div>');
+    var latest = {}; wf.forEach(function (w) { if (!latest[w.workflowName] && w.status === 'completed') latest[w.workflowName] = w; });
+    Object.keys(latest).sort().forEach(function (n) {
+      var w = latest[n], c = w.conclusion === 'success' ? 's-ok' : (w.conclusion === 'cancelled' || w.conclusion === 'skipped') ? 's-idle' : 's-bad';
+      h.push('<div class="kv ' + c + '"><b><span class="dot"></span> ' + esc(n) + '</b>Last: ' + esc(w.conclusion) + ', ' + esc(when(w.createdAt)) + ' · <a href="' + esc(w.url) + '">view</a></div>');
+    });
+    if (data.workflows && data.workflows.error) h.push('<div class="kv"><b>GitHub workflows</b><span style="color:var(--warn)">' + esc(data.workflows.error) + '</span></div>');
+    h.push('</div><p class="muted" style="font-size:13.5px;margin-top:10px"><a href="https://news.nuffieldconsulting.com/">news.nuffieldconsulting.com</a> · <a href="https://github.com/ukdavies/tech-wire/tree/ops-log/runs">Raw log on GitHub</a></p>');
+
+    // recent runs
+    h.push('<h2>Recent runs</h2>');
+    if (!runs.length) h.push('<p class="muted">Nothing logged yet.</p>');
+    var lastDay = '';
+    runs.slice(0, 120).forEach(function (r) {
+      var d = new Date(r.finished || r.started), day = fmtDay.format(d);
+      if (day !== lastDay) { h.push('<p class="muted" style="margin:18px 0 4px;font-weight:700">' + esc(day) + '</p>'); lastDay = day; }
+      var dur = r.started && r.finished ? Math.round((new Date(r.finished) - new Date(r.started)) / 60000) : null;
+      var flags = (r.errors.length ? ' · ' + r.errors.length + ' error' + (r.errors.length > 1 ? 's' : '') : '') + (r.warnings.length ? ' · ' + r.warnings.length + ' warning' + (r.warnings.length > 1 ? 's' : '') : '');
+      h.push('<details class="run"><summary><span class="t">' + esc(fmtTime.format(d)) + '</span><span class="n">' + esc(r.task || r.slug) + '<span class="muted">' + esc(flags) + '</span></span><span class="o o-' + esc(r.outcome) + '">' + esc((r.outcome || '?').replace('_', ' ')) + '</span></summary><div class="body">' +
+        '<div>' + esc(r.summary) + '</div>' +
+        '<div class="muted" style="margin-top:4px">' + (dur != null ? dur + ' min' : '') + (r.published.length ? ' · published ' + r.published.map(function (p) { return '<a href="https://github.com/ukdavies/tech-wire/commit/' + esc(p) + '">' + esc(p.slice(0, 7)) + '</a>'; }).join(', ') : '') + '</div>' +
+        (r.errors.length ? '<p style="margin:8px 0 2px;color:var(--bad)">Errors</p><pre>' + esc(r.errors.join('\n\n')) + '</pre>' : '') +
+        (r.warnings.length ? '<p style="margin:8px 0 2px;color:var(--warn)">Warnings</p><pre>' + esc(r.warnings.join('\n\n')) + '</pre>' : '') +
+        (Object.keys(r.counts || {}).length ? '<p style="margin:8px 0 2px" class="muted">Counts</p><pre>' + esc(Object.keys(r.counts).map(function (k) { return k + ': ' + JSON.stringify(r.counts[k]); }).join('\n')) + '</pre>' : '') +
+        '</div></details>');
+    });
+    app.innerHTML = h.join('');
+  }
+
+  var f = document.getElementById('unlock'), msg = document.getElementById('pw-msg');
+  f.addEventListener('submit', function (e) {
+    e.preventDefault(); msg.textContent = '';
+    load(document.getElementById('pw').value).catch(function (err) {
+      msg.textContent = err && err.message === 'nodata' ? 'The status data is not available yet.' : 'That password is not right.';
+      document.getElementById('pw').select();
+    });
+  });
+  try { var saved = sessionStorage.getItem('ts-pw'); if (saved) load(saved).catch(function () {}); } catch (e) {}
+})();
+</script>
+</body>
+</html>
