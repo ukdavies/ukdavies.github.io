@@ -86,21 +86,35 @@ footer a { color: var(--body); }
   var u = function (x) { return Uint8Array.from(atob(x), function (c) { return c.charCodeAt(0); }); };
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
 
-  function decrypt(D, pw) {
-    return crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey'])
-      .then(function (k) { return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: u(D.salt), iterations: D.it, hash: 'SHA-256' }, k, { name: 'AES-GCM', length: 256 }, false, ['decrypt']); })
+  // The status data is encrypted to this page's key; the key itself is locked with the password.
+  var DATA_URL = 'https://news.nuffieldconsulting.com/ops/status.json';
+  var LOCK = {"salt": "vd/5zr9wErm9IgDybNbgUg==", "iv": "/WVmE8OwNRGKjN0D", "it": 250000, "ct": "Y359tcTuXSM3DUyKcNTxqPSSxtflBD2KTFiq4gFZJiRcyjPPlGVKmxO8TgGi2D0MfWI/pcokLXRlzkm1nrsRKU9EIeLWlUhQRzbSFoa22K+k1UICpHCMmuv8+rQ+Go7+CrIEhViAybtGzWeSr3TdtCYbW8irYrI7Jl9aF9UHh9g6YmbHzt5nD6CiN3/szEHubTp2FwsLIid5eQ=="};
+  var te = new TextEncoder();
+  function unlockKey(pw) {
+    return crypto.subtle.importKey('raw', te.encode(pw), 'PBKDF2', false, ['deriveKey'])
+      .then(function (k) { return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: u(LOCK.salt), iterations: LOCK.it, hash: 'SHA-256' }, k, { name: 'AES-GCM', length: 256 }, false, ['decrypt']); })
+      .then(function (key) { return crypto.subtle.decrypt({ name: 'AES-GCM', iv: u(LOCK.iv) }, key, u(LOCK.ct)); })
+      .then(function (pk8) { return crypto.subtle.importKey('pkcs8', pk8, { name: 'ECDH', namedCurve: 'P-256' }, false, ['deriveBits']); });
+  }
+  function decrypt(D, priv) {
+    return crypto.subtle.importKey('spki', u(D.epk), { name: 'ECDH', namedCurve: 'P-256' }, false, [])
+      .then(function (epk) { return crypto.subtle.deriveBits({ name: 'ECDH', public: epk }, priv, 256); })
+      .then(function (bits) { return crypto.subtle.importKey('raw', bits, 'HKDF', false, ['deriveKey']); })
+      .then(function (ikm) { return crypto.subtle.deriveKey({ name: 'HKDF', hash: 'SHA-256', salt: u(D.salt), info: te.encode('tech-wire-status') }, ikm, { name: 'AES-GCM', length: 256 }, false, ['decrypt']); })
       .then(function (key) { return crypto.subtle.decrypt({ name: 'AES-GCM', iv: u(D.iv) }, key, u(D.ct)); })
       .then(function (buf) { return JSON.parse(new TextDecoder().decode(buf)); });
   }
   function load(pw) {
-    return fetch('data.json?t=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { if (!r.ok) throw new Error('nodata'); return r.json(); })
-      .then(function (D) { return decrypt(D, pw); })
-      .then(function (data) {
-        try { sessionStorage.setItem('ts-pw', pw); } catch (e) {}
-        document.getElementById('unlock').hidden = true;
-        app.hidden = false; render(data);
-      });
+    return unlockKey(pw).then(function (priv) {
+      try { sessionStorage.setItem('ts-pw', pw); } catch (e) {}
+      return fetch(DATA_URL + '?t=' + Date.now(), { cache: 'no-store' })
+        .then(function (r) { if (!r.ok) throw new Error('nodata'); return r.json(); }, function () { throw new Error('nodata'); })
+        .then(function (D) { return decrypt(D, priv); })
+        .then(function (data) {
+          document.getElementById('unlock').hidden = true;
+          app.hidden = false; render(data);
+        });
+    });
   }
 
   // ---------- time helpers (UK display, schedule maths in the task's own zone) ----------
